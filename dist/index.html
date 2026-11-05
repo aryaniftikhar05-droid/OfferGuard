@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Review recruitment text with an explainable machine learning model, evidence checks and clear limits.">
+  <meta name="color-scheme" content="light"><title>OfferGuard — look closer, apply smarter</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect rx='12' width='40' height='40' fill='%234e63dc'/%3E%3Cpath d='M20 8l11 4v8c0 7-11 13-11 13S9 27 9 20v-8z' fill='none' stroke='white' stroke-width='2'/%3E%3Cpath d='M15 20l4 4 7-8' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/style.css">
+  <script type="module" src="/assets/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Primary navigation">
+    <a href="#analyse" class="brand"><span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/></svg></span><span>OfferGuard<span class="brand-sub">Recruitment risk intelligence</span></span></a>
+    <div class="nav-caption">WORKSPACE</div>
+    <nav>
+      <a href="#analyse" class="nav-link active" data-page="analyse"><span data-icon="scan"></span>Analyse an offer<span class="nav-key">01</span></a>
+      <a href="#batch" class="nav-link" data-page="batch"><span data-icon="layers"></span>Batch review<span class="nav-key">02</span></a>
+      <a href="#report" class="nav-link" data-page="report"><span data-icon="chart"></span>Model report<span class="nav-key">03</span></a>
+      <a href="#project" class="nav-link" data-page="project"><span data-icon="code"></span>Inside the project<span class="nav-key">04</span></a>
+    </nav>
+    <div class="sidebar-note"><span class="note-symbol">↗</span><strong>A score is a starting point.</strong><p>Check the employer through a contact you found independently.</p><a href="https://www.reportfraud.police.uk/recruitment-scams/" target="_blank" rel="noopener noreferrer">Read official guidance <span aria-hidden="true">↗</span></a></div>
+    <div class="sidebar-bottom"><span class="status-dot"></span>Analysis stays in your browser<span class="version">RESEARCH BUILD · v0.1</span></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><div class="breadcrumb">Your workspace <span>/</span> <strong id="current-page">Analyse an offer</strong></div><div class="topbar-right"><span class="privacy-badge"><span data-icon="lock"></span>Runs in your browser</span><span class="avatar" aria-label="OfferGuard">OG</span></div></header>
+    <main id="main" tabindex="-1">
+      <section id="page-analyse" class="page">
+        <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span>LOOK CLOSER. APPLY SMARTER.</div><h1>An opportunity.<br>Or a warning sign?</h1><p class="lead">Look past a convincing job advert. Find the signals<br class="desktop-br"> that deserve a second look before you take the next step.</p></div><div class="heading-art" aria-hidden="true"><div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div><div class="art-shield"><svg viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/></svg></div><span class="art-chip chip-a">Evidence first</span><span class="art-chip chip-b"><i></i> On-device analysis</span></div></div>
+        <div class="flow-strip"><div><span>1</span>Paste the advert</div><i></i><div><span>2</span>Review the evidence</div><i></i><div><span>3</span>Verify independently</div></div>
+        <div class="analyse-grid">
+          <section class="card input-card" aria-labelledby="input-title">
+            <div class="card-top"><div><h2 id="input-title">Let’s take a closer look</h2><p>A job advert, offer email or recruiter message.</p></div><span class="small-icon" data-icon="file"></span></div>
+            <div class="input-wrap"><label for="offer-text">Recruitment text</label><textarea id="offer-text" maxlength="30000" placeholder="Paste the full advert or message here…&#10;&#10;Include what the role involves, how to apply, and any requests from the recruiter." spellcheck="false" aria-describedby="input-note"></textarea><div class="input-footer"><label class="upload-label"><span data-icon="upload"></span>Import .txt<input id="text-upload" type="file" accept=".txt,text/plain" class="sr-only"></label><span id="char-count">0 / 30,000</span></div></div>
+            <div class="examples"><span>Try an example</span><button class="example-pill" data-example="payment">Upfront fee <span>↗</span></button><button class="example-pill" data-example="ordinary">Typical advert <span>↗</span></button><button class="example-pill" data-example="subtle">Subtle warning <span>↗</span></button></div>
+            <p class="input-note" id="input-note"><span data-icon="info"></span>Examples are fictional. The model was trained on historical English job adverts; emails and messages have not been validated.</p>
+            <div id="input-error" class="form-error" role="alert" hidden></div>
+            <button id="analyse-button" class="primary-button" disabled><span data-icon="scan"></span><span id="button-label">Loading model…</span><span class="button-arrow">→</span></button>
+            <div class="privacy-line"><span data-icon="lock"></span>Text is processed here. No external AI service receives it.</div>
+          </section>
+          <section id="result-panel" class="card result-panel" aria-label="Analysis result" aria-live="polite">
+            <div class="result-empty"><div class="empty-icon"><span data-icon="search"></span><span class="empty-spark">+</span></div><h2>Clarity starts with evidence.</h2><p>Your review will appear here, with the<br>signals found and what to check next.</p><div class="empty-features"><div><span data-icon="check"></span>Specific text excerpts</div><div><span data-icon="check"></span>Explainable model signals</div><div><span data-icon="check"></span>Practical verification steps</div></div><div class="empty-footnote">No verdict without context.<br>No score can prove an offer is genuine.</div></div>
+          </section>
+        </div>
+        <div class="trust-strip"><div><span class="trust-icon" data-icon="cpu"></span><span><strong>Real machine learning</strong><small>A trained text model, with inspectable weights</small></span></div><div><span class="trust-icon" data-icon="eye"></span><span><strong>Evidence you can inspect</strong><small>Learned patterns and rule checks shown separately</small></span></div><div><span class="trust-icon" data-icon="chart"></span><span><strong>Limits in the open</strong><small>See false alarms, missed scams and data gaps</small></span></div></div>
+        <div class="research-note"><span class="research-tag">RESEARCH, WITH RECEIPTS</span><p>Built on <strong>17,880 labelled adverts</strong> from EMSCAD (2012–2014). Tested on companies and repeated descriptions kept apart from training.</p><a href="#report">Explore the model report <span>→</span></a></div>
+      </section>
+
+      <section id="page-batch" class="page" hidden>
+        <div class="eyebrow"><span class="eyebrow-line"></span>REVIEW A SHORTLIST</div><h1>One list. A clearer view.</h1><p class="lead">Screen up to 100 adverts locally. Export the results for a human review.</p>
+        <div class="card batch-upload"><span class="batch-icon" data-icon="layers"></span><h2>Import a CSV of adverts</h2><p>Use a <code>text</code> column and an optional <code>id</code> column. Maximum file size: 2 MB.</p><label class="primary-button upload-button">Choose CSV<input id="csv-upload" type="file" accept=".csv,text/csv" class="sr-only"></label><a href="/assets/example-adverts.csv" download>Download a fictional example CSV</a></div>
+        <div id="batch-message" role="status" class="batch-message"></div><div id="batch-results"></div>
+      </section>
+
+      <section id="page-report" class="page" hidden>
+        <div class="eyebrow"><span class="eyebrow-line"></span>MEASURED, NOT ASSUMED</div><h1>The model’s report card.</h1><p class="lead">An honest benchmark is more useful than an impressive accuracy claim.</p><div id="model-report"><p>Loading the evaluation…</p></div>
+      </section>
+
+      <section id="page-project" class="page" hidden>
+        <div class="eyebrow"><span class="eyebrow-line"></span>BUILT TO UNDERSTAND</div><h1>Beyond a prediction.</h1><p class="lead">A reproducible ML project, from raw data to a usable screening tool.</p>
+        <div class="project-grid"><div class="card project-card"><span class="project-number">01 / THE PROBLEM</span><h2>Convincing offers can hide harmful requests.</h2><p>OfferGuard helps job seekers inspect recruitment text before responding. It extracts warning signs and offers independent verification steps. It does not authenticate offers.</p><a href="https://www.reportfraud.police.uk/recruitment-scams/" target="_blank" rel="noopener noreferrer">Why this problem matters ↗</a></div><div class="card project-card"><span class="project-number">02 / THE APPROACH</span><h2>Two kinds of evidence, kept distinct.</h2><p>A TF-IDF logistic regression model learns word patterns. Separate policy checks find explicit payment requests, personal-account transfers, pressure and identity requests. Short or unfamiliar text triggers abstention from the model.</p></div><div class="card project-card"><span class="project-number">03 / ENGINEERING</span><h2>Python training. Browser inference.</h2><p>Learned weights and vocabulary are exported to JSON. Browser predictions are checked against Python fixtures. Input text stays on the device; no API key or language model subscription is needed.</p><a href="/assets/offerguard-source.zip" download>Download source, tests & training code ↓</a></div><div class="card project-card"><span class="project-number">04 / WHAT COMES NEXT</span><h2>The ambition needs fresh evidence.</h2><p>Collect consented, recent examples. Build a blinded evaluation across platforms. Add independently sourced company and recruiter verification. Measure whether users make better decisions. These stages are planned, not completed.</p></div></div>
+        <div class="card learn-card"><h2>Make this a project you can defend.</h2><p>Start with <code>ml/text.py</code>, then follow <code>ml/train.py</code>. Explain what TF-IDF measures, why test companies are separated, and why a model that always predicts “legitimate” can score 95% accuracy while catching zero scams. A downloaded codebase becomes your skill only when you can explain and change it.</p></div>
+      </section>
+      <footer class="main-footer"><span>OfferGuard <span class="footer-dot">·</span> Built for a more informed next step.</span><span>Research prototype <span class="footer-dot">·</span> No authenticity guarantee</span></footer>
+    </main>
+  </div>
+</div>
+</body></html>
