@@ -1,11 +1,11 @@
 # OfferGuard
 
 [![Tests](https://github.com/aryaniftikhar05-droid/OfferGuard/actions/workflows/ci.yml/badge.svg)](https://github.com/aryaniftikhar05-droid/OfferGuard/actions/workflows/ci.yml)
-![Python](https://img.shields.io/badge/Python-scikit--learn-3776AB)
-![JavaScript](https://img.shields.io/badge/JavaScript-browser%20inference-F7DF1E)
-![License](https://img.shields.io/badge/license-MIT-green)
+[![Python](https://img.shields.io/badge/Python-scikit--learn-3776AB)](https://scikit-learn.org/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-browser%20inference-F7DF1E)](dist/assets/engine.js)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-**Live demo:** https://aryaniftikhar05-droid.github.io/OfferGuard/
+**Live demo:** [aryaniftikhar05-droid.github.io/OfferGuard](https://aryaniftikhar05-droid.github.io/OfferGuard/)
 
 An explainable machine learning tool that helps job seekers spot recruitment scams.
 Paste a job advert or recruiter message and OfferGuard shows explicit warning
