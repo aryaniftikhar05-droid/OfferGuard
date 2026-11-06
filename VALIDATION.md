@@ -15,7 +15,7 @@
 - Desktop browser: model report navigation displayed recall, precision, false
   positives, false negatives and the weak UK slice correctly.
 - Authored app modules and Python scripts passed syntax checks.
-- Downloadable source archive inspected for raw data and Site identity exclusion.
+- Repository checked to confirm raw training data is not committed.
 
 ## Limits
 

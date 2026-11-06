@@ -6,7 +6,5 @@ node_modules/
 .venv/
 *.tar.gz
 artifacts/
-.openai/
-.codex/
 .env
 .env.*

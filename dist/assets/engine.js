@@ -29,7 +29,7 @@ const PRESSURE='https://www.ncsc.gov.uk/collection/phishing-scams/spot-scams';
 // Human-readable evidence policies, not outputs from the statistical model.
 const policies=[
   {id:'payment',title:'Payment requested during recruitment',severity:'high',
-   pattern:/\b(?:pay|send|transfer|deposit|purchase|buy|purchase|payment|required|charged)\b.{0,75}\b(?:fee|deposit|equipment|training|registration|processing|crypto|bitcoin|gift card|permit)\b|\b(?:registration|processing|administration|security|visa|training)\s+fee\b.{0,45}\b(?:required|payable|pay|send|transfer|before|upfront)\b/i,
+   pattern:/\b(?:pay|send|transfer|deposit|purchase|buy|payment|required|charged)\b.{0,75}\b(?:fee|deposit|equipment|training|registration|processing|crypto|bitcoin|gift card|permit)\b|\b(?:registration|processing|administration|security|visa|training)\s+fee\b.{0,45}\b(?:required|payable|pay|send|transfer|before|upfront)\b/i,
    advice:'Confirm any requested charge independently with the employer. Do not use contact details supplied only in the message.',source:SOURCE},
   {id:'mule',title:'Personal account used to move money',severity:'high',
    pattern:/\b(?:receive|transfer|forward|process|move)\b.{0,65}\b(?:payments|funds|money)\b.{0,65}\b(?:personal|your|own)\s+(?:bank\s+)?account\b|\b(?:personal|your|own)\s+(?:bank\s+)?account\b.{0,70}\b(?:receive|transfer|forward|process)\b/i,

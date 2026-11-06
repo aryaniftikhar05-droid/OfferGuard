@@ -90,7 +90,7 @@ function renderReport(r){
   <div class="card report-card"><h2>A split that asks a harder question.</h2><p>Could this model generalise beyond recurring company profiles and identical advert descriptions?</p>${Object.entries(split).map(([key,value])=>`<div class="split-row"><span class="split-label">${key==='calibration'?'Calibration':key==='train'?'Training':'Test'}</span><div class="split-bar"><span style="width:${value.rows/r.dataset.total*100}%"></span></div><small>${value.rows.toLocaleString('en-GB')}</small></div>`).join('')}<p style="margin-top:22px">Matching normalised company profiles and exact descriptions are grouped together, with no group shared across folds. Unknown companies and near-duplicates may still overlap.</p><p>TF-IDF is fitted on training text only. A held-out development fold calibrates scores and chooses an F2 threshold. The test fold is scored afterward.</p></div></div>
   <div class="report-note"><strong>Why “95% accurate” would be misleading here.</strong> Always predicting “legitimate” gets ${pct(r.majority_baseline.accuracy)} accuracy on this test set while catching zero scams. Recall, precision and missed cases show the practical trade-off.</div>
   <div class="card report-card report-full"><h2>Where the model is weakest</h2><p>The test set has just ${r.slices.uk?.scams||0} UK scams, and the model flagged ${r.slices.uk?.confusion.true_positive||0} of them. That sample is far too small to establish UK effectiveness. Remote-role recall was ${pct(r.slices.remote.recall)} across only ${r.slices.remote.scams} scams. These are gaps, not validated specialities.</p><ul>${r.limits.map(limit=>`<li>${esc(limit)}</li>`).join('')}</ul><p>No production safety claim is supported by this benchmark. The next research milestone is a consented, recent, independently labelled evaluation.</p></div>
-  <div class="report-download"><a href="/assets/evaluation.json" download>Download full evaluation JSON ↓</a><a href="https://doi.org/10.3390/fi9010006" target="_blank" rel="noopener noreferrer">Original dataset paper ↗</a><span>${r.features.toLocaleString('en-GB')} features · ${esc(r.model_version)}</span></div>`;
+  <div class="report-download"><a href="assets/evaluation.json" download>Download full evaluation JSON ↓</a><a href="https://doi.org/10.3390/fi9010006" target="_blank" rel="noopener noreferrer">Original dataset paper ↗</a><span>${r.features.toLocaleString('en-GB')} features · ${esc(r.model_version)}</span></div>`;
 }
 
 $('csv-upload').addEventListener('change',async event=>{
@@ -123,7 +123,7 @@ $('csv-upload').addEventListener('change',async event=>{
 
 async function boot(){
   try{
-    const responses=await Promise.all([fetch('/assets/model.json'),fetch('/assets/evaluation.json')]);
+    const responses=await Promise.all([fetch('assets/model.json'),fetch('assets/evaluation.json')]);
     if(responses.some(r=>!r.ok))throw new Error('Model assets could not be downloaded.');
     const [raw,r]=await Promise.all(responses.map(r=>r.json()));model=prepareModel(raw);report=r;
     $('analyse-button').disabled=false;$('button-label').textContent='Analyse text';renderReport(report);

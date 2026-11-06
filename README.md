@@ -1,10 +1,51 @@
 # OfferGuard
 
-An explainable recruitment-text screening prototype for job seekers.
+[![Tests](https://github.com/aryaniftikhar05-droid/OfferGuard/actions/workflows/ci.yml/badge.svg)](https://github.com/aryaniftikhar05-droid/OfferGuard/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-scikit--learn-3776AB)
+![JavaScript](https://img.shields.io/badge/JavaScript-browser%20inference-F7DF1E)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-Paste a job advert or recruitment message, inspect explicit warning signs and
-historical model signals, then verify the employer independently. A low model
-score **never** means a job or recruiter is verified.
+**Live demo:** https://aryaniftikhar05-droid.github.io/OfferGuard/
+
+An explainable machine learning tool that helps job seekers spot recruitment scams.
+Paste a job advert or recruiter message and OfferGuard shows explicit warning
+signs (upfront fees, money-mule requests, passport requests over WhatsApp),
+a calibrated text-model score, and what to verify next. Everything runs in the
+browser: no server, no API key, and the text never leaves the device.
+
+![OfferGuard analysing a fictional upfront-fee scam](docs/screenshot-analyse.png)
+
+### Highlights
+
+- **Trained, not prompted.** TF-IDF + logistic regression trained on 17,880
+  labelled adverts (EMSCAD), with held-out sigmoid calibration.
+- **Leakage-aware evaluation.** Company profiles and duplicate descriptions are
+  grouped with union-find so no group crosses train/calibration/test.
+- **Honest metrics.** 60.1% recall, 71.2% precision, 1.2% false positive rate,
+  ROC-AUC 0.90 on an untouched test set, compared against a 95.2%-accuracy
+  "always legitimate" baseline that catches zero scams.
+- **Python training, JavaScript inference.** The model is exported to JSON and
+  re-implemented in the browser; tests prove scores match scikit-learn to 1e-10.
+- **Explainable.** Shows the words that pushed the score up, plus rule-based
+  evidence with the exact sentence and official UK guidance links.
+- **Safe by design.** Abstains on short or unsupported-language text, escapes
+  all output, and protects CSV exports against formula injection.
+
+### How it works
+
+```mermaid
+flowchart LR
+    A[EMSCAD CSV] --> B[ml/train.py<br/>grouped split, TF-IDF,<br/>logistic regression,<br/>calibration]
+    B --> C[model.json<br/>vocabulary, IDF,<br/>weights]
+    B --> D[evaluation.json<br/>test metrics]
+    C --> E[engine.js<br/>browser inference]
+    F[Pasted advert] --> E
+    F --> G[Evidence rules<br/>fees, mule, ID, pressure]
+    E --> H[Result: score, top words,<br/>evidence, next steps]
+    G --> H
+```
+
+![Model report page](docs/screenshot-report.png)
 
 ## What works
 
@@ -40,12 +81,13 @@ required.
 
 ## Automated checks
 
-GitHub Actions runs the JavaScript tests and Python syntax checks on pushes and
-pull requests. Run the same checks locally with:
+GitHub Actions runs the JavaScript tests, the Python/JavaScript parity tests and
+Python syntax checks on every push and pull request. A second workflow deploys
+`dist/` to GitHub Pages after the tests pass. Run the same checks locally with:
 
 ```sh
-npm test
-python3 -m compileall -q ml scripts
+npm test                      # 12 engine tests, incl. Python/JS score parity
+python3 -m pytest -q tests    # preprocessing parity between Python and JS
 ```
 
 ## Reproduce training
@@ -59,12 +101,11 @@ python3 -m pip install -r requirements.txt
 python3 ml/download_data.py
 python3 ml/train.py --csv data/raw/emscad_v1.csv
 node --test tests/*.test.mjs
-python3 scripts/build_source.py
 ```
 
 Node 20+ runs the dependency-free JavaScript tests. Training replaces the exported
 model, report, split indices and parity fixtures. Changing a model requires
-revalidating inference parity and rebuilding the downloadable source archive.
+revalidating inference parity (`npm test`).
 
 ## Evaluation
 
@@ -98,6 +139,12 @@ model. This cannot support a claim of UK effectiveness. The historical model was
 not validated on present-day offer emails, chat messages, documents, visas or
 sponsor decisions. Its score is not a current real-world fraud probability.
 
+A concrete example of domain shift: the fictional upfront-fee message in the
+screenshot above scores only 4/100 from the historical text model, because modern
+chat-style scams do not look like 2012–2014 job adverts. It is still flagged as
+"Strong warning signs" by the evidence rules. This is why the two layers are kept
+separate and shown side by side.
+
 Full reproducibility information: `dist/assets/evaluation.json` and `ml/split.json`.
 The test set has now been inspected. Future model development should use new
 development data and a fresh held-out evaluation rather than repeatedly tuning
@@ -122,7 +169,7 @@ spreadsheet injection risk. Browser analysis has no external inference call.
 
 ## Validation
 
-Twelve dependency-free tests check real Python/JS inference parity, payment and
+Fourteen tests check real Python/JS inference parity, payment and
 money-mule warnings, negation, abstention, unsupported language, input limits,
 CSV quoting, formula-injection protection and evaluation consistency.
 Browser QA covers example analysis, report navigation and batch import.
@@ -142,19 +189,6 @@ See VALIDATION.md for the performed checks and any limits.
 5. Run a blinded user study to measure whether the tool improves decisions and
    avoids giving false reassurance. No impact claim is currently established.
 
-## Learn it in a defensible order
-
-1. Trace one sentence through `tokenize` and write a new input-handling test.
-2. Explain the difference between a parameter, an argument and a return value in
-   `predict(text, model)`. Modify one pure function and run its tests.
-3. Compute term frequency and TF-IDF for three short adverts by hand.
-4. Explain precision and recall from the four confusion-matrix counts.
-5. Reproduce training, inspect false positives privately, and propose an
-   experiment with a fresh test set.
-
-Code was built with AI assistance. Understanding, validating and extending it is
-the work required before presenting it as your own engineering expertise.
-
 ## Sources and reuse
 
 Vidros et al. (2017), *Automatic Detection of Online Recruitment Frauds:
@@ -167,5 +201,5 @@ https://www.reportfraud.police.uk/recruitment-scams/
 NCSC suspicious-message guidance:
 https://www.ncsc.gov.uk/collection/phishing-scams/spot-scams
 
-Code is MIT licensed. The dataset and learned artifacts have separate provenance
+Developed with AI coding assistance. Code is MIT licensed. The dataset and learned artifacts have separate provenance
 and reuse considerations described in DATA_CARD.md. Raw adverts are not included.
