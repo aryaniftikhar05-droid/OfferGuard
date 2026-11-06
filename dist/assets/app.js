@@ -80,6 +80,8 @@ function renderResult(result){
     privacy:'Original input omitted. Matched evidence excerpts are included. No company or identity verification performed.'
   },null,2));
 }
+// Ctrl+Enter (or Cmd+Enter on a Mac) analyses the text without leaving the keyboard.
+$('offer-text').addEventListener('keydown',event=>{if(event.key==='Enter'&&(event.ctrlKey||event.metaKey)){event.preventDefault();$('analyse-button').click();}});
 $('analyse-button').addEventListener('click',()=>{
   if(!model)return;error('');
   try{currentResult=assess($('offer-text').value,model);renderResult(currentResult);if(innerWidth<951)$('result-panel').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});}

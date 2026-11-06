@@ -69,3 +69,23 @@ test('Highlights model terms only when the model did not abstain',async()=>{
   const short=assess('Pay a registration fee of £150 before starting.',model);
   assert.ok(highlightSegments('Pay a registration fee of £150 before starting.',short).every(s=>s.kind!=='model'));
 });
+test('Ordinary advert wording is not a payment or money-mule warning',()=>{
+  // Each sentence matched a high-severity rule before the rules were tightened.
+  for(const s of ['We will pay for your training and all equipment.','Experience required in delivering training to new staff.',
+    'Weekly pay - Direct deposit - Bonuses','REQUIRED EDUCATION/TRAINING','We offer excellent pay, benefits, newer equipment and the necessary training.',
+    'This position is responsible for billing, payment processing and accounts receivable.','The company will pay the $75 application fee.',
+    'A great dental plan for which you pay $0 in premiums.','Create your account to process your application.',
+    'You will process customer payments and keep your account records up to date.','Process transactions including cashing checks for customers.'])
+    assert.deepEqual(findEvidence(s).filter(e=>e.severity==='high').map(e=>e.id),[],s);
+});
+test('Common scam requests are found',()=>{
+  const cases={
+    payment:['You will need to pay $200 for your starter kit.','Buy Apple gift cards and send us the codes to cover your onboarding.','Not only do we offer mentoring, you must pay a training fee of £200 first.','No experience required, pay a training fee of £99 to begin.'],
+    cheque:['We will send you a cheque; deposit it and wire the balance to our vendor.'],
+    reship:['Receive packages at your home address and reship them to our overseas office.'],
+    mule:['Accept transfers into your bank account and forward them to our partners, keeping 10% commission.'],
+    chat:['The interview will be conducted via Telegram with our hiring manager.'],
+  };
+  for(const [id,sentences] of Object.entries(cases))for(const s of sentences)
+    assert.ok(findEvidence(s).some(e=>e.id===id),`${id}: ${s}`);
+});

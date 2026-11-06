@@ -1,0 +1,29 @@
+{
+  "rows": 17880,
+  "legitimate": 17014,
+  "fraudulent": 866,
+  "rules": {
+    "guarantee": {
+      "severity": "medium",
+      "legitimate_fire_rate": 0.00005877512636652169,
+      "fraudulent_fire_rate": 0,
+      "legitimate": 1,
+      "fraudulent": 0
+    },
+    "pressure": {
+      "severity": "medium",
+      "legitimate_fire_rate": 0.0012342776536969555,
+      "fraudulent_fire_rate": 0.026558891454965358,
+      "legitimate": 21,
+      "fraudulent": 23
+    }
+  },
+  "any_high": {
+    "legitimate_fire_rate": 0,
+    "fraudulent_fire_rate": 0
+  },
+  "any_rule": {
+    "legitimate_fire_rate": 0.0012930527800634772,
+    "fraudulent_fire_rate": 0.026558891454965358
+  }
+}

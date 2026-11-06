@@ -22,3 +22,4 @@ mark.hl{border-radius:4px;padding:1px 2px;color:inherit}
 mark.hl.evidence-high{background:#f8d9d2;box-shadow:inset 0 -2px 0 #d38a78}
 mark.hl.evidence-medium,mark.hl.evidence-low{background:#fbe8d2;box-shadow:inset 0 -2px 0 #e0a868}
 mark.hl.model{background:#e3e7ff;box-shadow:inset 0 -2px 0 #9aa6ee}
+.shortcut{font:inherit;font-size:9px;opacity:.75;border:1px solid #ffffff59;border-radius:4px;padding:1px 5px}@media(hover:none){.shortcut{display:none}}

@@ -28,6 +28,9 @@ browser: no server, no API key, and the text never leaves the device.
   re-implemented in the browser; tests prove scores match scikit-learn to 1e-10.
 - **Explainable.** Shows the words that pushed the score up, plus rule-based
   evidence with the exact sentence and official UK guidance links.
+- **Measured warning rules.** Every evidence rule is run over all 17,880
+  labelled adverts (`ml/evaluate_rules.mjs`). High-severity rules fire on 0 of
+  17,014 legitimate adverts (down from 1.5% before they were tightened).
 - **Safe by design.** Abstains on short or unsupported-language text, escapes
   all output, and protects CSV exports against formula injection.
 
@@ -52,8 +55,10 @@ flowchart LR
 - Real ML: a trained TF-IDF (unigrams + bigrams) logistic regression model with
   held-out sigmoid calibration. 24,000 exported features; no paid AI API.
 - Browser-local inference with Python/JavaScript prediction parity tests.
-- Separate evidence rules for payment requests, personal-account transfers,
-  identity documents over chat, urgency, guarantees and personal email.
+- Separate evidence rules for payment requests (fees, gift cards, crypto),
+  personal-account transfers, fake-cheque overpayment, parcel reshipping,
+  identity documents over chat, chat-only interviews, urgency, guarantees and
+  personal email.
 - Input abstention for short, poorly covered or unsupported-language text.
 - **See it in your text:** the pasted advert is shown with risky sentences
   highlighted by severity and the words that raised the model score marked, so
@@ -89,7 +94,7 @@ Python syntax checks on every push and pull request. A second workflow deploys
 `dist/` to GitHub Pages after the tests pass. Run the same checks locally with:
 
 ```sh
-npm test                      # 14 engine tests, incl. Python/JS score parity
+npm test                      # 16 engine tests, incl. Python/JS score parity
 python3 -m pytest -q tests    # preprocessing parity between Python and JS
 ```
 
@@ -104,6 +109,7 @@ python3 -m pip install -r requirements.txt
 python3 ml/download_data.py
 python3 ml/train.py --csv data/raw/emscad_v1.csv
 node --test tests/*.test.mjs
+node ml/evaluate_rules.mjs data/raw/emscad_v1.csv   # evidence-rule false-alarm rates
 ```
 
 Node 20+ runs the dependency-free JavaScript tests. Training replaces the exported
@@ -163,6 +169,14 @@ calibration parameters. These values are exported to `model.json`.
 logit and sigmoid-calibrated score. Positive feature contributions can be
 inspected. Separate regex policies extract evidence and cite official guidance.
 They are incomplete heuristics, not an independently validated scam detector.
+`ml/evaluate_rules.mjs` reports how often each rule fires on legitimate and
+fraudulent EMSCAD adverts and saves the counts (no advert text) to
+`ml/rule-evaluation.json`. On EMSCAD, the high-severity rules fire on 0 of
+17,014 legitimate adverts; the earlier payment rule fired on 1.5% of them
+(phrases such as “weekly pay, direct deposit” and “required training”), more
+often than on scams. EMSCAD scams rarely contain explicit fee or mule requests,
+so this measures false alarms well but says little about recall on modern
+chat-style scams.
 Negation handling is conservative and sentence based, not full language
 understanding; sophisticated rewrites can evade it or produce false alarms.
 
@@ -172,8 +186,9 @@ spreadsheet injection risk. Browser analysis has no external inference call.
 
 ## Validation
 
-Fourteen tests check real Python/JS inference parity, payment and
-money-mule warnings, negation, abstention, unsupported language, input limits,
+Sixteen tests check real Python/JS inference parity, payment, money-mule,
+cheque, reshipping and chat-interview warnings, ordinary advert wording that
+must not trigger a warning, negation, abstention, unsupported language, input limits,
 CSV quoting, formula-injection protection and evaluation consistency.
 Browser QA covers example analysis, report navigation and batch import.
 See VALIDATION.md for the performed checks and any limits.
