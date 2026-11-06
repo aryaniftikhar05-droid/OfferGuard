@@ -106,3 +106,28 @@ export function csvCell(value) {
   if(/^[\s]*[=+@\-\t\r]/.test(s))s="'"+s;
   return '"'+s.replaceAll('"','""')+'"';
 }
+
+// Split the original text into plain and highlighted pieces for display.
+// Evidence sentences take priority over words that raised the model score.
+// Returns [{text, kind}] where kind is null, 'model' or 'evidence-<severity>'.
+export function highlightSegments(text,result) {
+  const source=String(text), lower=source.toLowerCase(), marks=new Array(source.length).fill(null);
+  const paint=(start,end,kind,force)=>{for(let i=start;i<end;i++)if(force||!marks[i])marks[i]=kind;};
+  for(const e of result.evidence||[]){
+    const quote=e.quote.toLowerCase(); if(!quote)continue;
+    let at=lower.indexOf(quote);
+    while(at!==-1){paint(at,at+quote.length,'evidence-'+e.severity,true);at=lower.indexOf(quote,at+quote.length);}
+  }
+  if(!result.abstained){
+    for(const {term} of (result.model&&result.model.influences)||[]){
+      const pattern=new RegExp('\\b'+term.split(' ').map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('\\s+')+'\\b','gi');
+      for(const m of source.matchAll(pattern))paint(m.index,m.index+m[0].length,'model',false);
+    }
+  }
+  const segments=[];
+  for(let i=0;i<source.length;i++){
+    const last=segments[segments.length-1];
+    if(last&&last.kind===marks[i])last.text+=source[i];else segments.push({text:source[i],kind:marks[i]});
+  }
+  return segments;
+}

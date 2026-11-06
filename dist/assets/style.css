@@ -12,3 +12,13 @@
 @media(max-width:950px){.nav-link{font-size:10px}.flow-strip{font-size:10px}.sidebar-note p,.sidebar-note a{font-size:10px}.sidebar-note strong{font-size:11px}.sidebar-bottom{font-size:8px}}
 @media(max-width:680px){.nav-link{font-size:10px}.flow-strip{font-size:9px;gap:7px}.flow-strip i{width:8px}.examples{gap:6px}.examples>span{width:100%}.input-note,.privacy-line{font-size:10px}.lead{font-size:12px}.research-note a{font-size:11px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* Inline highlights of evidence and model terms inside the user's own text. */
+.highlight-details{border-top:1px solid #f0f1f6;margin-top:18px;padding-top:13px;font-size:11px;color:#8996b3}
+.highlight-details summary{cursor:pointer;color:#5b6582;font-weight:600;display:flex;align-items:center;justify-content:space-between}
+.highlight-details p{font-size:10px;line-height:2;color:#8a93a8;margin:10px 0}
+.highlight-text{max-height:260px;overflow:auto;white-space:pre-wrap;word-break:break-word;background:var(--canvas);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.75;color:var(--ink)}
+mark.hl{border-radius:4px;padding:1px 2px;color:inherit}
+mark.hl.evidence-high{background:#f8d9d2;box-shadow:inset 0 -2px 0 #d38a78}
+mark.hl.evidence-medium,mark.hl.evidence-low{background:#fbe8d2;box-shadow:inset 0 -2px 0 #e0a868}
+mark.hl.model{background:#e3e7ff;box-shadow:inset 0 -2px 0 #9aa6ee}

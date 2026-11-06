@@ -51,3 +51,21 @@ test('Historical evaluation counts are internally consistent',()=>{
   const split=JSON.parse(readFileSync(new URL('../ml/split.json',import.meta.url)));
   const all=Object.values(split).flat();assert.equal(all.length,new Set(all).size);assert.equal(all.length,r.dataset.total);
 });
+test('Highlights evidence sentences and keeps the full text',async()=>{
+  const {highlightSegments}=await import('../dist/assets/engine.js');
+  const text='Thanks for applying. Pay a registration fee of £150 before starting. Welcome!';
+  const r=assess(text,model), segs=highlightSegments(text,r);
+  assert.equal(segs.map(s=>s.text).join(''),text);
+  const marked=segs.filter(s=>s.kind==='evidence-high').map(s=>s.text).join('');
+  assert.match(marked,/registration fee of £150/);
+  assert.equal(segs.find(s=>s.text.includes('Thanks')).kind,null);
+});
+test('Highlights model terms only when the model did not abstain',async()=>{
+  const {highlightSegments}=await import('../dist/assets/engine.js');
+  const text='Work from home data entry. Earn weekly cash. No experience needed. '.repeat(6);
+  const r=assess(text,model), segs=highlightSegments(text,r);
+  assert.equal(segs.map(s=>s.text).join(''),text);
+  if(!r.abstained&&r.model.influences.length)assert.ok(segs.some(s=>s.kind==='model'));
+  const short=assess('Pay a registration fee of £150 before starting.',model);
+  assert.ok(highlightSegments('Pay a registration fee of £150 before starting.',short).every(s=>s.kind!=='model'));
+});

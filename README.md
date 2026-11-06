@@ -55,6 +55,9 @@ flowchart LR
 - Separate evidence rules for payment requests, personal-account transfers,
   identity documents over chat, urgency, guarantees and personal email.
 - Input abstention for short, poorly covered or unsupported-language text.
+- **See it in your text:** the pasted advert is shown with risky sentences
+  highlighted by severity and the words that raised the model score marked, so
+  every result can be checked against the original wording.
 - Single review with excerpts, next steps and JSON export.
 - CSV batch review (100 rows, 2 MB), per-row validation and CSV export.
 - A model report with false alarms, missed cases, slices and limitations.
@@ -86,7 +89,7 @@ Python syntax checks on every push and pull request. A second workflow deploys
 `dist/` to GitHub Pages after the tests pass. Run the same checks locally with:
 
 ```sh
-npm test                      # 12 engine tests, incl. Python/JS score parity
+npm test                      # 14 engine tests, incl. Python/JS score parity
 python3 -m pytest -q tests    # preprocessing parity between Python and JS
 ```
 
