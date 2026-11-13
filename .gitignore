@@ -8,3 +8,10 @@ node_modules/
 artifacts/
 .env
 .env.*
+
+# Keys and credentials must never be committed
+*.pem
+*.key
+*.p12
+secrets.toml
+credentials.json
